@@ -1,6 +1,6 @@
 import numpy as np
-from gradient import gradient
-from sto_grad import sto_grad
+from src.logistic_regression.gradient import gradient
+from sgd import sto_grad
 
 def AdaSVRG(w_0, tx, y, K, m):
     w = [w_0]
