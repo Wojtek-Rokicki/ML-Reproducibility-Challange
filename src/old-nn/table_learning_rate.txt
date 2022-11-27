@@ -1,0 +1,10 @@
+\begin{tabular}{lrrlllrrr}
+\toprule
+{} &  Epoch &  Learning rate & Hidden layers & N of input neurons in layer 1 & N of input neurons in layer 2 &  Classified correctly &  Execution time &  Epochs \\
+\midrule
+0 &    NaN &           0,05 &             2 &                            30 &                            15 &                 90,59 &        214,4291 &    10,0 \\
+1 &    NaN &           0,10 &             2 &                            30 &                            15 &                 92,12 &        218,4669 &    10,0 \\
+2 &    NaN &           0,15 &             2 &                            30 &                            15 &                 92,77 &        216,2691 &    10,0 \\
+3 &    NaN &           0,20 &             2 &                            30 &                            15 &                 93,64 &        213,8328 &    10,0 \\
+\bottomrule
+\end{tabular}
