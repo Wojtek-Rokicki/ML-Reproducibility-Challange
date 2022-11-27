@@ -1,0 +1,5 @@
+Epoch,Learning rate,Hidden layers,N of input neurons in layer 1,N of input neurons in layer 2,Classified correctly,Execution time,Epochs
+,0.05,2,30,15,90.59,214.4291,10.0
+,0.1,2,30,15,92.12,218.4669,10.0
+,0.15,2,30,15,92.77,216.2691,10.0
+,0.2,2,30,15,93.64,213.8328,10.0

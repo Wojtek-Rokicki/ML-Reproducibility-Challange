@@ -1,0 +1,113 @@
+Do przetestowania
+
+1 warstwa ukryta:
+    liczby neuronów: 16, 25, 40
+
+2 warstwy ukryte:
+    liczby neuronów: 30/15, 15/15, 15/30
+
+
+Learning rate: 0.05, 0.10, 0.15, 0.20
+Liczba epok: 5, 10, 15, 20
+
+
+Schemat:
+
+Learning_rate = 0.1
+Epochs = 10
+
+Dla tych parametrów sprawdzanie kombinacji:
+
+1 warstwa ukryta:
+    liczby neuronów: 16, 25, 40
+
+2 warstwy ukryte:
+    liczby neuronów: 30/15, 15/15, 15/30
+
+Dla najlepszej z nich sprawdzanie:
+
+Learning rate: 0.05, 0.10, 0.15, 0.20
+Liczba epok: 5, 10, 15, 20
+
+
+---- Analiza zbioru treningowego ----
+
+Zbiór treningowy składa się z 60'000 próbek ręcznie napisanych cyfr. Poniżej przedstawiono ilość wystąpień
+każdej cyfry:
+
+0 5923
+1 6742
+2 5958
+3 6131
+4 5842
+5 5421
+6 5918
+7 6265
+8 5851
+9 5949
+
+Widzimy, że w zbiorze treningowym znajduje się najmniej próbek dla cyfry 5 (owy fakt okaże się przydatny w dalszej analizie)
+Natomiast najwięcej grafik posiada cyfra 1.
+Każda próba została przedstawiona jako grafika 28 x 28 pikseli w odcieniach szarości, gdzie piksel posiada
+wartość liczbową z zakresu 0-255.
+
+---- opis wyglądu NN -----
+
+Poniższa grafika przedstawia przykładowy model sieci neuronowej.
+Określony przez nas najlepszy model składa się z czterech warstw:
+- warstwa wejściowa: posiada 784 neurony (każdy jeden przyjmuje wartość jednego pixela)
+- pierwsza warstwa ukryta: posiada 30 neuronów
+- druga warstwa ukryta: posiada 15 neuronów
+- warstwa wyjścia: warstwa aktywacji posiadająca 10 neuronów
+
+--- Przykłady zbioru MNIST sklasyfikowane niepoprawnie ---
+
+Sprawdzono, które próbki ze zbioru testowego zostały źle sklasyfikowane przez wytrenowaną sieć
+
+-- wstawic tu tabelkę z pliku classified results.csv albo ten .latex (otworzyc w excelu)
+-- napisać, że w kolumnach są faktyczne cyfry
+-- w wierszach są ilości predykcji
+
+Okazuje się, że najwięcej razy zostały pomylone cyfry 4 i 9. Takowych przypadków jest 56.
+Przykład grafiki przedstawiający cyfrę 4, która została sklasyfikowana przez sieć jako cyfra 9:
+cyfra_4_jako_9.jpg
+
+Poniżej przedstawiono kolejne grafiki błędnie sklasyfikowanych cyfr:
+
+cyfra_5_jako_3.png - 5 sklasyfikowana jako 3
+cyfra_7_jako_2.png
+cyfra_9_jako_4.png
+cyfra_5_jako_8.png
+
+Ilość, źle sklasyfikowanych cyfr:
+cyfry | ilość
+0 42
+1 36
+2 126
+3 96
+4 98
+5 150
+6 80
+7 90
+8 98
+9 118
+
+Ilość wystąpień każdej cyfry w zbiorze treningowym
+0    1033
+1    1147
+2    1073
+3    1106
+4    1025
+5     885
+6    1012
+7    1059
+8    1067
+9    1060
+
+Większość z przedstawionych próbek przedstawia grafiki cyfr, które nie są napisane starannie.
+Nie dziwi więc, że wytrenowany model nie poradził sobie z ich klasyfikacją.
+Z powyższej analizy możemy wywnioskować, że nasz model najgorzej radzi sobie z klasyfikacją cyfry 5.
+Posiada ona największą liczbę błędnie sklasyfikowanych próbek. Dodatkowo na powyższej grafice przedstawiającej
+błędnie sklasyfikowaną cyfrę 5, widać że jest ona napisana wyraźnie i starannie. Warto zauważyć, że tych przypadków
+byłoby prawdopodobnie więcej, ze względu na to, że zbiór treningowy posiadał najmniej wystapień cyfry 5.
+Cyfra 1 została błędnie sklasyfikowana najmniejszą ilość razy.
