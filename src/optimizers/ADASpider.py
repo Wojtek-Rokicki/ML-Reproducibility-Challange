@@ -1,10 +1,20 @@
 import numpy as np
+from typing import List
 
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
-def ADASpider(w_0, max_iter, tx, y, **kwargs):
+def ADASpider(w_0, max_iter, tx, y, **kwargs) -> List:
+    """
+    Compute ADASpider
+    :param w_0: Initial weights vector.
+    :param max_iter: Maximum number of iterations
+    :param tx: Built model
+    :param y: Target data
+    :return: List of Gradients
+    """
+
     grads = []
     w = [w_0]
     n = len(y)
