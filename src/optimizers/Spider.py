@@ -1,25 +1,19 @@
 import numpy as np
+from typing import List
 
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
-"""
-inputs:
-- w_0: initial weights
-- tx: dataset
-- y: labels
-- max_iter: number of iterations
-"""
 
 
-def Spider(w_0, max_iter, tx, y, parameters):
+def Spider(w_0, max_iter, tx, y, parameters) -> List:
     """
     Compute spider
     :param w_0: initial weights vector.
     :param max_iter:
-    :param tx:
-    :param y:
+    :param tx: Built model
+    :param y: Target data
     :param S2: Number of samples to compute gradient from.
-    :return:
+    :return: List of Gradients
     """
     S2 = parameters.S2
     n_0 = parameters.n_0
