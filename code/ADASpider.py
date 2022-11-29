@@ -1,4 +1,6 @@
 import numpy as np
+from gradient import gradient
+from sto_grad import sto_grad
 
 """
 inputs:
@@ -24,7 +26,7 @@ def ADASpider(w_0, max_iter, tx, y):
         gamma = 1 / (n**(1/4) * np.sqrt(np.sqrt(n) + grad_sum))
         w_next = w[t] - gamma * t_grad
 
-        x.append(x_next)
+        w.append(w_next)
         grads.append(t_grad)
 
     return w

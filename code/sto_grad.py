@@ -1,4 +1,5 @@
-import numpy
+import numpy as np
+from gradient import gradient
 
 def sto_grad(y, tx, w, i_t):
     y_sgd = y[i_t]
