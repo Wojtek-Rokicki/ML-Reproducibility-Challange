@@ -7,7 +7,7 @@ from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 def Spider(w_0, max_iter, tx, y, parameters) -> List:
     """
-    Compute spider
+    Compute Spider
     :param w_0: initial weights vector.
     :param max_iter:
     :param tx: Built model
