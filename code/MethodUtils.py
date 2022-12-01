@@ -24,7 +24,7 @@ def sto_grad(y, tx, w, i_t):
     x_sgd = np.array(tx[i_t,:])
     return gradient(y_sgd, x_sgd, w)
 
-# compute the sum of gradients for t th stepsize
+# compute the sum of gradients for t'th stepsize
 def grad_sum(grads):
     temp = np.empty(len(grads))
     for s in range(len(grads)):

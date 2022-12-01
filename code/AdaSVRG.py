@@ -1,19 +1,17 @@
 import numpy as np
-from gradient import gradient
-from sto_grad import sto_grad
+from MethodUtils import *
 
 def AdaSVRG(w_0, tx, y, K, m):
     w = [w_0]
-    n = len(y)
+    step_size = 1 / np.max([np.linalg.norm(tx[i])**2 for i in range(len(tx))])
 
     for k in range(K - 1):
         k_grad = gradient(y, tx, w[k])
-        step_size =  np.max([np.linalg.norm(tx[i])**2 for i in range(len(tx))])
 
         x = [w[k]]
         G = [0]
         for t in range(1, m + 1):
-            i_t = np.random.choice(np.arange(1, n))
+            i_t = np.random.choice(np.arange(len(y)))
             g_t = sto_grad(y, tx, x[t - 1], i_t) - sto_grad(y, tx, w[k], i_t) + k_grad
             G_t = G[t - 1] + np.linalg.norm(g_t)**2
             A_t = np.sqrt(G_t)

@@ -1,5 +1,5 @@
 import numpy as np
-from AdaSpiderUtil import *
+from MethodUtils import *
 
 """
 inputs:
@@ -10,15 +10,14 @@ inputs:
 """
 
 def ADASpider(w_0, tx, y, max_iter):
-    grads = []#np.empty((max_iter,len(w_0)))
+    grads = []
     w = [w_0]
-    n = len(y)
 
     for t in range(max_iter):
-        if t % n == 0:
+        if t % len(y) == 0:
             t_grad = gradient(tx, y, w[t])
         else:
-            i_t = np.random.choice(np.arange(1,n))
+            i_t = np.random.choice(np.arange(len(y)))
             t_grad = sto_grad(y, tx, w[t], i_t) - sto_grad(y, tx, w[t-1], i_t) - grads[t-1]
         
         grads.append(t_grad)
@@ -27,4 +26,4 @@ def ADASpider(w_0, tx, y, max_iter):
         w_next = w[t] - gamma * t_grad
         w.append(w_next)
 
-    return w
+    return grads
