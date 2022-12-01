@@ -7,7 +7,7 @@ from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 def sgd(w_0, max_iter, tx, y, params):
     """
-    Compute ADASpider
+    Compute Stochastic gradient Descent 
     :param w_0: Initial weights vector.
     :param max_iter: Maximum number of iterations
     :param tx: Built model
