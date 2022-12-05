@@ -4,7 +4,7 @@ from src.logistic_regression.stochastic_gradient import stochastic_gradient
 from src.utils.method_utils import *
 
 
-def SVRG(y, tx, w_0, max_iter, q):
+def SVRG(w_0, tx, y, max_iter, q):
     w = [w_0]
     grads = []
     gamma = 1 / np.max([np.linalg.norm(tx[i])**2 for i in range(len(tx))])

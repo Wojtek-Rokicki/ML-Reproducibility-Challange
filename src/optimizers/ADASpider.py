@@ -19,7 +19,7 @@ def ADASpider(w_0, tx, y, max_iter):
 
     for t in range(max_iter):
         if t % len(y) == 0:
-            t_grad = log_reg_gradient(tx, y, w[t])
+            t_grad = log_reg_gradient(y, tx, w[t])
         else:
             i_t = np.random.choice(np.arange(len(y)))
             t_grad = stochastic_gradient(y, tx, w[t], i_t) - stochastic_gradient(y, tx, w[t - 1], i_t) - grads[t - 1]

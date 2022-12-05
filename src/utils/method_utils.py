@@ -11,7 +11,7 @@ def non_convex(w):
 
 def grad_sum(grads):
     # compute the sum of gradients for t'th stepsize
-    temp = np.empty(len(grads))
+    temp = list()
     for s in range(len(grads)):
         temp.append(np.linalg.norm(grads[s])**2)
     return np.sum(temp)

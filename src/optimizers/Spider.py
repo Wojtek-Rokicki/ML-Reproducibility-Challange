@@ -5,7 +5,7 @@ from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
-def Spider(w_0, max_iter, tx, y, parameters) -> List:
+def Spider(w_0, tx, y, max_iter, parameters) -> List:
     """
     Compute Spider
     :param w_0: initial weights vector.

@@ -5,7 +5,7 @@ from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
-def sgd(w_0, max_iter, tx, y, params):
+def sgd(w_0, tx, y, max_iter, params):
     """
     Compute Stochastic gradient Descent 
     :param w_0: Initial weights vector.
