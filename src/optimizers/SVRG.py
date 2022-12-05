@@ -1,5 +1,8 @@
-import numpy as np
-from MethodUtils import *
+from src.logistic_regression.log_reg_gradient import log_reg_gradient
+from src.logistic_regression.stochastic_gradient import stochastic_gradient
+
+from src.utils.method_utils import *
+
 
 def SVRG(y, tx, w_0, max_iter, q):
     w = [w_0]
@@ -11,9 +14,9 @@ def SVRG(y, tx, w_0, max_iter, q):
         
         if k % q == 0:
             z = w[k]
-            v = gradient(y, tx, w[k])
+            v = log_reg_gradient(y, tx, w[k])
 
-        grad = sto_grad(y, tx, w[k], i_k) - sto_grad(y, tx, z, i_k) + v
+        grad = stochastic_gradient(y, tx, w[k], i_k) - stochastic_gradient(y, tx, z, i_k) + v
 
         next_w = w[k] - gamma * grad
 
