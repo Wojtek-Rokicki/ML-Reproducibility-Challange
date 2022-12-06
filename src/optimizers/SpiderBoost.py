@@ -7,10 +7,16 @@ from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
 class SpiderBoost(Optimizer):
-    """
-    Implementation of SPIDER boost method.
-    """
     name = "SpiderBoost"
+
+    def __init__(self,
+                 q: int):
+        """
+        Implementation of SPIDER boost method.
+        Args:
+            q: Number of iterations for each the variance reduction gradient should be saved
+        """
+        self.q = q
 
     def optimize(self, w_0, tx, y, max_iter):
         """Algorithm for gradient optimization, which estimates gradients and reduces their iterative variance.
@@ -39,16 +45,22 @@ class SpiderBoost(Optimizer):
         w = [w_0]
         v_k = 0
 
+        lipshitz_const = 200  # np.linalg.norm(tx, 'fro') ** 2
+
         # Algorithm
         for t in range(max_iter):
-            lipshitz_const = np.linalg.norm(tx, 'fro')**2
-            if t % n == 0:
+            if t % self.q == 0:
                 v_k = log_reg_gradient(y, tx, w[t])
+                is_oracle_grad = False
             else:
-                i = np.random.choice(np.arange(1, n))
-                v_k = partial_sum = stochastic_gradient(y, tx, w[t], i) - stochastic_gradient(y, tx, w[t-1], i) + v_k
+                i_t = np.random.choice(np.arange(n))
+                v_k = stochastic_gradient(y, tx, w[t], [i_t]) - stochastic_gradient(y, tx, w[t-1], [i_t]) + v_k
+                is_oracle_grad = True
+
             w_next = w[t] - 1/(2*lipshitz_const)*v_k
             w.append(w_next)
-            grads.append(v_k)
+
+            if is_oracle_grad is False:
+                grads.append(v_k)
 
         return grads

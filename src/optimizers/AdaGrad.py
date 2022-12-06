@@ -10,14 +10,17 @@ class AdaGrad(Optimizer):
 
     def __init__(self,
                  lambda_: float,
+                 q: int,
                  epsilon: float = 1e-8):
         """
         Implementation of AdaGrad method.
         Args:
             lambda_:
+            q: Number of iterations for each the variance reduction gradient should be saved
             epsilon:
         """
         self.lambda_ = lambda_
+        self.q = q
         self.epsilon = epsilon
 
     def optimize(self, w_0, tx, y, max_iter):
@@ -54,5 +57,9 @@ class AdaGrad(Optimizer):
             w_next = w[t] - v_k
             w.append(w_next)
             grads.append(v_k)
+
+            # save only oracle calls
+            if t % self.q == 0:
+                grads.append(g_t)
 
         return grads

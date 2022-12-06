@@ -10,8 +10,8 @@ class SVRG(Optimizer):
     name = "SVRG"
 
     def __init__(self,
-                 q: float,
-                 lambda_: float):
+                 lambda_: float,
+                 q: float):
         """
         Implementation of SVRG method.
         Args:
@@ -23,6 +23,7 @@ class SVRG(Optimizer):
     def optimize(self, w_0, tx, y, max_iter):
         w = [w_0]
         grads = []
+
         step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
 
         for k in range(max_iter):
@@ -31,11 +32,14 @@ class SVRG(Optimizer):
                 v = log_reg_gradient(y, tx, w[k])
 
             i_k = np.random.choice(np.arange(len(y)))
-            grad = stochastic_gradient(y, tx, w[k], i_k) - stochastic_gradient(y, tx, z, i_k) + v
+            grad = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
 
             next_w = w[k] - step_size * grad
 
             w.append(next_w)
-            grads.append(grad)
+
+            # save only oracle calls
+            if k % self.q == 0:
+                grads.append(grad)
 
         return grads

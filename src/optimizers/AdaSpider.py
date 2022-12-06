@@ -7,10 +7,16 @@ from src.utils.method_utils import *
 
 
 class AdaSpider(Optimizer):
-    """
-    Implementation of AdaSpider method.
-    """
     name = "AdaSpider"
+
+    def __init__(self,
+                 q: int):
+        """
+        Implementation of AdaSpider method.
+        Args:
+            q: Number of iterations for each the variance reduction gradient should be saved
+        """
+        self.q = q
 
     def optimize(self, w_0, tx, y, max_iter):
         """
@@ -28,12 +34,12 @@ class AdaSpider(Optimizer):
         is_oracle_grad = False
 
         for t in range(max_iter):
-            if t % len(y) == 0:
+            if t % self.q == 0:
                 t_grad = log_reg_gradient(y, tx, w[t])
                 is_oracle_grad = False
             else:
                 i_t = np.random.choice(np.arange(len(y)))
-                t_grad = stochastic_gradient(y, tx, w[t], i_t) - stochastic_gradient(y, tx, w[t - 1], i_t) - grads[t - 1]
+                t_grad = stochastic_gradient(y, tx, w[t], [i_t]) - stochastic_gradient(y, tx, w[t - 1], [i_t]) + grads[t - 1]
                 is_oracle_grad = True
 
             grads.append(t_grad)
@@ -43,5 +49,6 @@ class AdaSpider(Optimizer):
             w.append(w_next)
             if is_oracle_grad is False:
                 oracle_grads.append(t_grad)
+                is_oracle_grad = True
 
         return oracle_grads
