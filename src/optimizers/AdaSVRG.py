@@ -1,15 +1,17 @@
+from src.optimizers.Optimizer import Optimizer
+
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 from src.utils.method_utils import *
 
 
-class AdaSVRG:
+class AdaSVRG(Optimizer):
     name = "AdaSVRG"
 
     def __init__(self,
                  q: int,
-                 lambda_: int):
+                 lambda_: float):
         """
         Implementation of SPIDER method.
         Args:

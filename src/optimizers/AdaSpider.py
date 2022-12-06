@@ -1,20 +1,21 @@
+from src.optimizers.Optimizer import Optimizer
+
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 from src.utils.method_utils import *
 
 
-class AdaSpider:
+class AdaSpider(Optimizer):
     """
     Implementation of AdaSpider method.
     """
     name = "AdaSpider"
 
-    @staticmethod
-    def optimize(w_0, tx, y, max_iter):
+    def optimize(self, w_0, tx, y, max_iter):
         """
         Compute ADASpider
-        :param w_0: Initial weights vector.
+        :param w_0: Initial weights vector
         :param max_iter: Maximum number of iterations
         :param tx: Built model
         :param y: Target data

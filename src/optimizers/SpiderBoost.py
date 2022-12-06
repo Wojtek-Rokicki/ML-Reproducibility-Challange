@@ -1,10 +1,12 @@
 import numpy as np
 
+from src.optimizers.Optimizer import Optimizer
+
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
-class SpiderBoost:
+class SpiderBoost(Optimizer):
     """
     Implementation of SPIDER boost method.
     """
@@ -35,17 +37,18 @@ class SpiderBoost:
         # Outputs
         grads = []
         w = [w_0]
+        v_k = 0
 
         # Algorithm
-        for t in max_iter:
-            lipshitz_const = np.linalg.norm(tx[t], 'fro')
+        for t in range(max_iter):
+            lipshitz_const = np.linalg.norm(tx, 'fro')**2
             if t % n == 0:
-                v_k = log_reg_gradient(tx, y, w[t]) # logistic cost function full gradient
+                v_k = log_reg_gradient(y, tx, w[t])
             else:
                 i = np.random.choice(np.arange(1, n))
-                v_k = partial_sum = stochastic_gradient(y, tx, w, i) - stochastic_gradient(y, tx, w[t-1], i) + v_k
+                v_k = partial_sum = stochastic_gradient(y, tx, w[t], i) - stochastic_gradient(y, tx, w[t-1], i) + v_k
             w_next = w[t] - 1/(2*lipshitz_const)*v_k
-            w.append[w_next]
+            w.append(w_next)
             grads.append(v_k)
 
         return grads

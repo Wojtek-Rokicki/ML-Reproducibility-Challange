@@ -1,24 +1,26 @@
 import numpy as np
 
+from src.optimizers.Optimizer import Optimizer
+
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
-class SGD:
+class SGD(Optimizer):
     name = "SGD"
 
     def __init__(self,
-                 gamma: float):
+                 lambda_: float):
         """
         Implementation of SGD method.
         Args:
-            gamma: Step size
+            lambda_: Step size
         """
-        self.gamma = gamma
+        self.gamma = lambda_
 
     def optimize(self, w_0, tx, y, max_iter):
         """
         Compute Stochastic gradient Descent
-        :param w_0: Initial weights vector.
+        :param w_0: Initial weights vector
         :param max_iter: Maximum number of iterations
         :param tx: Built model
         :param y: Target data

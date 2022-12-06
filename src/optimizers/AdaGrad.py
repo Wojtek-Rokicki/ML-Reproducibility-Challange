@@ -1,9 +1,11 @@
 import numpy as np
 
+from src.optimizers.Optimizer import Optimizer
+
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 
 
-class AdaGrad:
+class AdaGrad(Optimizer):
     name = "AdaGrad"
 
     def __init__(self,
@@ -46,7 +48,7 @@ class AdaGrad:
         w = [w_0]
 
         for t in range(max_iter):
-            g_t = log_reg_gradient(tx, y, w[t])
+            g_t = log_reg_gradient(y, tx, w[t])
             G_t += np.diag([g_t_i ** 2 for g_t_i in g_t])
             v_k = self.lambda_ / np.sqrt(G_t + self.epsilon) * g_t
             w_next = w[t] - v_k

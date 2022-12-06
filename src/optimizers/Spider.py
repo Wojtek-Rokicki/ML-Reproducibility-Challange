@@ -1,11 +1,13 @@
 import numpy as np
 from typing import List
 
+from src.optimizers.Optimizer import Optimizer
+
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
-class Spider:
+class Spider(Optimizer):
     name = "Spider"
 
     def __init__(self,
@@ -37,7 +39,7 @@ class Spider:
 
         is_oracle_grad = False
         for t in range(max_iter):
-            lipshitz_const = np.linalg.norm(tx[t], 'fro')
+            lipshitz_const = np.linalg.norm(tx, 'fro')**2
             if t % n == 0:
                 v_k = log_reg_gradient(y, tx, w[t])
                 is_oracle_grad = False
@@ -45,7 +47,7 @@ class Spider:
                 # sample_indices = np.random.choice(range(0, len(y)), size=S2, replace=False)
                 i_t = np.random.choice(np.arange(1, n))
                 # v_k = sgd(y, tx, w[t], [i_t]) - sgd(y, tx, w[t-1], [i_t]) - grads[t-1]
-                v_k = stochastic_gradient(y, tx, w[t], i_t) - stochastic_gradient(y, tx, w[t - 1], i_t) - grads[t - 1]
+                v_k = stochastic_gradient(y, tx, w[t], i_t) - stochastic_gradient(y, tx, w[t-1], i_t) - grads[t - 1]
                 is_oracle_grad = True
             term1 = self.epsilon/(lipshitz_const*self.n_0*np.linalg.norm(v_k, 2))
             term2 = 1/(2*lipshitz_const*self.n_0)
