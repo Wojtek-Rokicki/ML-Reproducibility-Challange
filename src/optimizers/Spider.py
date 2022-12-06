@@ -21,18 +21,21 @@ def Spider(w_0, tx, y, max_iter, parameters) -> List:
 
 
     grads = []
+    oracle_grads = []
     w = [w_0]
     n = len(y)
 
+    is_oracle_grad = False
     for t in range(max_iter):
         if t % n == 0:
             v_k = log_reg_gradient(y, tx, w[t])
+            is_oracle_grad = False
         else:
             sample_indices = np.random.choice(range(0, len(y)), size=S2, replace=False)
             # i_t = np.random.choice(np.arange(1, n))
             # v_k = sgd(y, tx, w[t], [i_t]) - sgd(y, tx, w[t-1], [i_t]) - grads[t-1]
             v_k = stochastic_gradient(y, tx, w[t], sample_indices) - stochastic_gradient(y, tx, w[t - 1], sample_indices) - grads[t - 1]
-
+            is_oracle_grad = True
         term1 = epsilon/(n_0*np.linalg.norm(v_k, 2))
         term2 = 1/(2*n_0)
         eta_k = np.min([term1, term2])  # choose minimum between two terms
@@ -41,5 +44,7 @@ def Spider(w_0, tx, y, max_iter, parameters) -> List:
 
         w.append(w_next)
         grads.append(v_k)
+        if is_oracle_grad is False:
+            oracle_grads.append(v_k)
 
-    return grads
+    return oracle_grads
