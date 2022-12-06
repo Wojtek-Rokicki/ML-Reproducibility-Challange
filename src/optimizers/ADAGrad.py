@@ -1,4 +1,5 @@
 import numpy as np
+
 from src.logistic_regression.log_reg_gradient import log_reg_gradient
 
 
