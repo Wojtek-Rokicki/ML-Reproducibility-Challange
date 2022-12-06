@@ -8,21 +8,24 @@ class SVRG:
     name = "SVRG"
 
     def __init__(self,
-                 q: float):
+                 q: float,
+                 lambda_: float):
         """
         Implementation of SVRG method.
         Args:
             q:
         """
         self.q = q
+        self.lambda_ = lambda_
 
     def optimize(self, w_0, tx, y, max_iter):
         w = [w_0]
         grads = []
-        gamma = 1 / np.max([np.linalg.norm(tx[i])**2 for i in range(len(tx))])
+        step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
 
         for k in range(max_iter):
             i_k = np.random.choice(np.arange(len(y)))
+            next_w = w[k] - step_size * grad
 
             if k % self.q == 0:
                 z = w[k]
@@ -30,7 +33,7 @@ class SVRG:
 
             grad = stochastic_gradient(y, tx, w[k], i_k) - stochastic_gradient(y, tx, z, i_k) + v
 
-            next_w = w[k] - gamma * grad
+            next_w = w[k] - self.lambda_ * grad
 
             w.append(next_w)
             grads.append(grad)
