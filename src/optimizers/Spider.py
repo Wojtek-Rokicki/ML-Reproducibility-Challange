@@ -10,18 +10,15 @@ class Spider:
 
     def __init__(self,
                  n_0: float,
-                 epsilon: float,
-                 lipshitz_const: float):
+                 epsilon: float):
         """
         Implementation of SPIDER method.
         Args:
             n_0:
             epsilon:
-            lipshitz_const: Lipshitz constant.
         """
         self.n_0 = n_0
         self.epsilon = epsilon
-        self.lipshitz_const = lipshitz_const
 
     def optimize(self, w_0, tx, y, max_iter) -> List:
         """
@@ -40,6 +37,7 @@ class Spider:
 
         is_oracle_grad = False
         for t in range(max_iter):
+            lipshitz_const = np.linalg.norm(tx[t], 'fro')
             if t % n == 0:
                 v_k = log_reg_gradient(y, tx, w[t])
                 is_oracle_grad = False
@@ -49,8 +47,8 @@ class Spider:
                 # v_k = sgd(y, tx, w[t], [i_t]) - sgd(y, tx, w[t-1], [i_t]) - grads[t-1]
                 v_k = stochastic_gradient(y, tx, w[t], i_t) - stochastic_gradient(y, tx, w[t - 1], i_t) - grads[t - 1]
                 is_oracle_grad = True
-            term1 = self.epsilon/(self.n_0*np.linalg.norm(v_k, 2))
-            term2 = 1/(2*self.n_0)
+            term1 = self.epsilon/(lipshitz_const*self.n_0*np.linalg.norm(v_k, 2))
+            term2 = 1/(2*lipshitz_const*self.n_0)
             eta_k = np.min([term1, term2])
 
             w_next = w[t] - eta_k*v_k

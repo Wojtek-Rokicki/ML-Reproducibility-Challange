@@ -5,16 +5,10 @@ from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 
 class SpiderBoost:
+    """
+    Implementation of SPIDER boost method.
+    """
     name = "SpiderBoost"
-
-    def __init__(self,
-                 lipshitz_const: float):
-        """
-        Implementation of SPIDER boost method.
-        Args:
-            lipshitz_const: Lipshitz constant.
-        """
-        self.lipshitz_const = lipshitz_const
 
     def optimize(self, w_0, tx, y, max_iter):
         """Algorithm for gradient optimization, which estimates gradients and reduces their iterative variance.
@@ -35,7 +29,6 @@ class SpiderBoost:
             Array of gradient estimators in each step of the algorithm.
         """
         # Intrinsic parameters initialization
-        eta = 1/(2*self.lipshitz_const)
         N = len(tx)
         n = len(y)
 
@@ -45,12 +38,13 @@ class SpiderBoost:
 
         # Algorithm
         for t in max_iter:
+            lipshitz_const = np.linalg.norm(tx[t], 'fro')
             if t % n == 0:
                 v_k = log_reg_gradient(tx, y, w[t]) # logistic cost function full gradient
             else:
                 i = np.random.choice(np.arange(1, n))
                 v_k = partial_sum = stochastic_gradient(y, tx, w, i) - stochastic_gradient(y, tx, w[t-1], i) + v_k
-            w_next = w[t] - eta*v_k
+            w_next = w[t] - 1/(2*lipshitz_const)*v_k
             w.append[w_next]
             grads.append(v_k)
 
