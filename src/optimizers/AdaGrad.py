@@ -51,9 +51,9 @@ class AdaGrad(Optimizer):
         w = [w_0]
 
         for t in range(max_iter):
-            g_t = log_reg_gradient(y, tx, w[t])
-            G_t += np.diag([g_t_i ** 2 for g_t_i in g_t])
-            v_k = self.lambda_ / np.sqrt(G_t + self.epsilon) * g_t
+            g_t = log_reg_gradient(tx, y, w[t])
+            G_t += g_t**2
+            v_k = np.diag(self.lambda_ / np.sqrt(G_t + self.epsilon)) @ g_t
             w_next = w[t] - v_k
             w.append(w_next)
             grads.append(v_k)
