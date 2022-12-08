@@ -56,7 +56,6 @@ class AdaGrad(Optimizer):
             v_k = np.diag(self.lambda_ / np.sqrt(G_t + self.epsilon)) @ g_t
             w_next = w[t] - v_k
             w.append(w_next)
-            grads.append(v_k)
 
             # save only oracle calls
             if t % self.q == 0:
