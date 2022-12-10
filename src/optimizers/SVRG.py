@@ -1,6 +1,6 @@
 from src.optimizers.Optimizer import Optimizer
 
-from src.logistic_regression.log_reg_gradient import log_reg_gradient
+from src.logistic_regression.log_reg import log_reg_gradient, calculate_loss
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 from src.utils.method_utils import *
@@ -8,6 +8,7 @@ from src.utils.method_utils import *
 
 class SVRG(Optimizer):
     name = "SVRG"
+    n_params_to_tune = 1
 
     def __init__(self,
                  lambda_: float,
@@ -20,9 +21,13 @@ class SVRG(Optimizer):
         self.q = q
         self.lambda_ = lambda_
 
+    def set_params(self, new_lambda):
+        self.lambda_ = new_lambda
+
     def optimize(self, w_0, tx, y, max_iter):
         w = [w_0]
         grads = []
+        losses = []
 
         step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
 
@@ -38,8 +43,7 @@ class SVRG(Optimizer):
 
             w.append(next_w)
 
-            # save only oracle calls
-            if k % self.q == 0:
-                grads.append(grad)
+            grads.append(grad)
+            losses.append(calculate_loss(y, tx, next_w))
 
-        return grads
+        return grads, losses

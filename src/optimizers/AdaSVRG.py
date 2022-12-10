@@ -1,6 +1,6 @@
 from src.optimizers.Optimizer import Optimizer
 
-from src.logistic_regression.log_reg_gradient import log_reg_gradient
+from src.logistic_regression.log_reg import log_reg_gradient, calculate_loss
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 from src.utils.method_utils import *
@@ -8,6 +8,7 @@ from src.utils.method_utils import *
 
 class AdaSVRG(Optimizer):
     name = "AdaSVRG"
+    n_params_to_tune = 1
 
     def __init__(self,
                  q: int,
@@ -21,9 +22,13 @@ class AdaSVRG(Optimizer):
         self.q = q
         self.lambda_ = lambda_
 
+    def set_params(self, new_lambda):
+        self.lambda_ = new_lambda
+
     def optimize(self, w_0, tx, y, max_iter):
         w = [w_0]
         grads = []
+        losses = []
         G = [0]
 
         # L = np.linalg.norm(tx, 'fro')**2 + lamb <- regularizer param
@@ -44,10 +49,9 @@ class AdaSVRG(Optimizer):
             next_w = w[k] - step_size * g_t / A_t
 
             w.append(next_w)
-            G.append(G_t)
+            G.append(g_t)
+            losses.append(calculate_loss(y, tx, next_w))
 
-            # save only oracle calls
-            if k % self.q == 0:
-                grads.append(g_t)
+            grads.append(g_t)
 
-        return grads
+        return grads, losses

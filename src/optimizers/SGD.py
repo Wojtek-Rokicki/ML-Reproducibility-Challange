@@ -3,10 +3,12 @@ import numpy as np
 from src.optimizers.Optimizer import Optimizer
 
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
+from src.logistic_regression.log_reg import calculate_loss
 
 
 class SGD(Optimizer):
     name = "SGD"
+    n_params_to_tune = 1
 
     def __init__(self,
                  q: int,
@@ -18,7 +20,10 @@ class SGD(Optimizer):
             lambda_: Step size
         """
         self.q = q
-        self.gamma = lambda_
+        self.lambda_ = lambda_
+
+    def set_params(self, new_lambda):
+        self.lambda_ = new_lambda
 
     def optimize(self, w_0, tx, y, max_iter):
         """
@@ -30,18 +35,17 @@ class SGD(Optimizer):
         :return: List of Gradients
         """
         grads = []
+        losses = []
         w = [w_0]
         n = len(y)
 
         for t in range(max_iter):
             i_t = np.random.choice(np.arange(n))  # get index of sample for which to compute gradient
             gradient = stochastic_gradient(y, tx, w[t], [i_t])
-            w_next = w[t] - self.gamma*gradient
+            w_next = w[t] - self.lambda_ * gradient
 
             w.append(w_next)
+            grads.append(gradient)
+            losses.append(calculate_loss(y, tx, w_next))
 
-            # save only oracle calls
-            if t % self.q == 0:
-                grads.append(gradient)
-
-        return grads
+        return grads, losses
