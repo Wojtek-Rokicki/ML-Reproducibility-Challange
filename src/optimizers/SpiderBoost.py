@@ -48,7 +48,7 @@ class SpiderBoost(Optimizer):
         w = [w_0]
         v_k = 0
 
-        lipshitz_const = 200  # np.linalg.norm(tx, 'fro') ** 2
+        lipshitz_const = np.linalg.norm(tx, 'fro') ** 2  # 200  #
 
         # Algorithm
         for t in range(max_iter):

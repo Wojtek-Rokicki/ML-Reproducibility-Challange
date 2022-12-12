@@ -38,10 +38,10 @@ class AdaSpider(Optimizer):
         for t in range(max_iter):
             if t % self.q == 0:
                 t_grad = log_reg_gradient(y, tx, w[t])
+                oracle_grads.append(t_grad)
             else:
                 i_t = np.random.choice(np.arange(len(y)))
                 t_grad = stochastic_gradient(y, tx, w[t], [i_t]) - stochastic_gradient(y, tx, w[t - 1], [i_t]) + grads[t - 1]
-                oracle_grads.append(t_grad)
 
             grads.append(t_grad)
             gamma = 1 / (n ** (1 / 4) * np.sqrt(np.sqrt(n) + grad_sum(grads)))
