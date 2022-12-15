@@ -40,8 +40,9 @@ class SGD(Optimizer):
         n = len(y)
 
         for t in range(max_iter):
-            i_t = np.random.choice(np.arange(n))  # get index of sample for which to compute gradient
-            gradient = stochastic_gradient(y, tx, w[t], [i_t])
+            # i_t = np.random.choice(np.arange(n))  # get index of sample for which to compute gradient
+            sample_indices = np.random.choice(range(0, len(y)), size=10, replace=False)
+            gradient = stochastic_gradient(y, tx, w[t], sample_indices)
             w_next = w[t] - self.lambda_ * gradient
 
             w.append(w_next)
