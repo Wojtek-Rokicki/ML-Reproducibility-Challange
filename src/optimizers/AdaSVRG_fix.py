@@ -15,7 +15,7 @@ class AdaSVRG(Optimizer):
                  lambda_: float,
                  epsilon: float = 1e-8):
         """
-        Implementation of SPIDER method.
+        Implementation of AdaSVRG method.
         Args:
             q: Number of iterations for each the variance reduction gradient should be saved
             lambda_:
@@ -51,7 +51,7 @@ class AdaSVRG(Optimizer):
 
             g_k = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
             G_k += np.linalg.norm(g_k) ** 2
-            A_k = np.diag(self.lambda_ / np.sqrt(G_k) + self.epsilon)
+            A_k = np.diag(step_size / np.sqrt(G_k) + self.epsilon)
 
             next_w = w[k] - A_k @ g_k
 
