@@ -8,7 +8,7 @@ from src.utils.method_utils import *
 
 class AdaSVRG(Optimizer):
     name = "AdaSVRG"
-    n_params_to_tune = 1
+    n_params_to_tune = 2
 
     def __init__(self,
                  q: int,
