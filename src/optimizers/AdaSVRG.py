@@ -30,6 +30,7 @@ class AdaSVRG(Optimizer):
         grads = []
         losses = []
         G = [0]
+        n = len(y)
 
         # L = np.linalg.norm(tx, 'fro')**2 + lamb <- regularizer param
         # l_max (below) is max l for each row
@@ -41,6 +42,7 @@ class AdaSVRG(Optimizer):
             if k % self.q == 0:
                 z = w[k]
                 v = log_reg_gradient(y, tx, w[k])
+                grads.append(v)
 
             g_t = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
             G_t = G[k] + np.linalg.norm(g_t) ** 2
@@ -51,7 +53,5 @@ class AdaSVRG(Optimizer):
             w.append(next_w)
             G.append(g_t)
             losses.append(calculate_loss(y, tx, next_w))
-
-            grads.append(g_t)
 
         return grads, losses

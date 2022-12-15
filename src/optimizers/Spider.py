@@ -44,21 +44,21 @@ class Spider(Optimizer):
         losses = []
         w = [w_0]
         n = len(y)
-        lipshitz_const = 100  # np.linalg.norm(tx, 'fro') ** 2
+        lipshitz_const = np.linalg.norm(tx, 'fro') ** 2 + 5  # 100  #
 
         for t in range(max_iter):
             if t % self.q == 0:
                 v_k = log_reg_gradient(y, tx, w[t])
+                oracle_grads.append(v_k)
             else:
                 # sample_indices = np.random.choice(range(0, len(y)), size=S2, replace=False)
                 i_t = np.random.choice(np.arange(n))
                 # v_k = sgd(y, tx, w[t], [i_t]) - sgd(y, tx, w[t-1], [i_t]) - grads[t-1]
                 v_k = stochastic_gradient(y, tx, w[t], [i_t]) - stochastic_gradient(y, tx, w[t-1], [i_t]) + grads[t - 1]
-                oracle_grads.append(v_k)
 
-            term1 = self.epsilon/(lipshitz_const*self.n_0*np.linalg.norm(v_k, 2))
+            term1 = self.epsilon/(lipshitz_const*self.n_0*np.linalg.norm(v_k))
             term2 = 1/(2*lipshitz_const*self.n_0)
-            eta_k = term2  # np.min([term1, term2])
+            eta_k = np.min([term1, term2])
 
             w_next = w[t] - eta_k*v_k
 
