@@ -8,29 +8,34 @@ from src.utils.method_utils import *
 
 class AdaSVRG(Optimizer):
     name = "AdaSVRG"
-    n_params_to_tune = 1
+    n_params_to_tune = 2
 
     def __init__(self,
                  q: int,
-                 lambda_: float):
+                 lambda_: float,
+                 epsilon: float = 1e-8):
         """
-        Implementation of SPIDER method.
+        Implementation of AdaSVRG method.
         Args:
             q: Number of iterations for each the variance reduction gradient should be saved
             lambda_:
         """
         self.q = q
         self.lambda_ = lambda_
+        self.epsilon = epsilon
 
-    def set_params(self, new_lambda):
+    def set_params(self, new_lambda, new_epsilon):
         self.lambda_ = new_lambda
+        self.epsilon = new_epsilon
 
     def optimize(self, w_0, tx, y, max_iter):
+        D = len(w_0)
+        G_k = np.zeros((D, D))
+        
+        # Outputs
         w = [w_0]
         grads = []
         losses = []
-        G = [0]
-        n = len(y)
 
         # L = np.linalg.norm(tx, 'fro')**2 + lamb <- regularizer param
         # l_max (below) is max l for each row
@@ -44,14 +49,13 @@ class AdaSVRG(Optimizer):
                 v = log_reg_gradient(y, tx, w[k])
                 grads.append(v)
 
-            g_t = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
-            G_t = G[k] + np.linalg.norm(g_t) ** 2
-            A_t = np.sqrt(G_t)
+            g_k = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
+            G_k += np.linalg.norm(g_k) ** 2
+            A_k = np.diag(step_size / np.sqrt(G_k) + self.epsilon)
 
-            next_w = w[k] - step_size * g_t / A_t
+            next_w = w[k] - A_k @ g_k
 
             w.append(next_w)
-            G.append(g_t)
             losses.append(calculate_loss(y, tx, next_w))
 
         return grads, losses
