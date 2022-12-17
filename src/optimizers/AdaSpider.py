@@ -30,6 +30,7 @@ class AdaSpider(Optimizer):
         """
         grads = []
         oracle_grads = []
+        full_grads = [log_reg_gradient(y, tx, w_0)]
         losses = []
         w = [w_0]
         n = len(y)
@@ -48,6 +49,7 @@ class AdaSpider(Optimizer):
 
             w_next = w[t] - gamma * t_grad
             w.append(w_next)
+            full_grads = [log_reg_gradient(y, tx, w[t+1])]
             losses.append(calculate_loss(y, tx, w_next))
 
-        return oracle_grads, losses
+        return full_grads, losses

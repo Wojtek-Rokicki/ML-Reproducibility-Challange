@@ -41,6 +41,7 @@ class Spider(Optimizer):
         """
         grads = []
         oracle_grads = []
+        full_grads = [log_reg_gradient(y, tx, w_0)]
         losses = []
         w = [w_0]
         n = len(y)
@@ -63,6 +64,7 @@ class Spider(Optimizer):
             w_next = w[t] - eta_k*v_k
 
             w.append(w_next)
+            full_grads = [log_reg_gradient(y, tx, w[t+1])]
             grads.append(v_k)
             losses.append(calculate_loss(y, tx, w_next))
 

@@ -5,14 +5,15 @@ from src.logistic_regression.log_reg import log_reg_gradient, calculate_loss
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 class SAG:
-  def __init__(self, learning_rate=0.001):
-    self.learning_rate = learning_rate
+  def __init__(self, lambda_=0.001):
+    self.learning_rate = lambda_
   
 def optimize(self, w_0, tx, y, max_iter):
     w = [w_0]
     grads = []
     losses = []
     past_grads = []
+    full_grads = [log_reg_gradient(y, tx, w_0)]
     avg_grad 
 
     for t in range(max_iter):
@@ -24,5 +25,8 @@ def optimize(self, w_0, tx, y, max_iter):
 
         w_next = w[t] - self.learning_rate * (avg_grad + t_grad)
         w.append(w_next)
+        full_grads = [log_reg_gradient(y, tx, w[t+1])]
         grads.append(avg_grad + t_grad)
         losses.append(calculate_loss(y, tx, w_next))
+
+    return full_grads, losses

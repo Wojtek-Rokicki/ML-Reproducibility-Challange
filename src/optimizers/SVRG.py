@@ -27,6 +27,7 @@ class SVRG(Optimizer):
     def optimize(self, w_0, tx, y, max_iter):
         w = [w_0]
         grads = []
+        full_grads = [log_reg_gradient(y, tx, w_0)]
         losses = []
         n = len(y)
 
@@ -45,6 +46,7 @@ class SVRG(Optimizer):
             next_w = w[k] - step_size * grad
 
             w.append(next_w)
+            full_grads = [log_reg_gradient(y, tx, w[k+1])]
             losses.append(calculate_loss(y, tx, next_w))
 
-        return grads, losses
+        return full_grads, losses

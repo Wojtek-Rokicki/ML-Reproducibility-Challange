@@ -35,6 +35,7 @@ class AdaSVRG(Optimizer):
         # Outputs
         w = [w_0]
         grads = []
+        full_grads = [log_reg_gradient(y, tx, w_0)]
         losses = []
 
         # L = np.linalg.norm(tx, 'fro')**2 + lamb <- regularizer param
@@ -56,6 +57,7 @@ class AdaSVRG(Optimizer):
             next_w = w[k] - A_k @ g_k
 
             w.append(next_w)
+            full_grads = [log_reg_gradient(y, tx, w[k+1])]
             losses.append(calculate_loss(y, tx, next_w))
 
-        return grads, losses
+        return full_grads, losses

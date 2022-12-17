@@ -3,7 +3,7 @@ import numpy as np
 from src.optimizers.Optimizer import Optimizer
 
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
-from src.logistic_regression.log_reg import calculate_loss
+from src.logistic_regression.log_reg import log_reg_gradient, calculate_loss
 
 
 class SGD(Optimizer):
@@ -34,7 +34,7 @@ class SGD(Optimizer):
         :param y: Target data
         :return: List of Gradients
         """
-        grads = []
+        full_grads = [log_reg_gradient(y, tx, w_0)]
         losses = []
         w = [w_0]
         n = len(y)
@@ -46,7 +46,7 @@ class SGD(Optimizer):
             w_next = w[t] - self.lambda_ * gradient
 
             w.append(w_next)
-            grads.append(gradient)
+            full_grads.append(log_reg_gradient(y, tx, w[t+1]))
             losses.append(calculate_loss(y, tx, w_next))
 
-        return grads, losses
+        return full_grads, losses
