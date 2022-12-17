@@ -63,7 +63,7 @@ class SpiderBoost(Optimizer):
             w_next = w[t] - 1/(2*lipshitz_const)*v_k
             w.append(w_next)
             grads.append(v_k)
-            full_grads = [log_reg_gradient(y, tx, w[t+1])]
+            full_grads.append(log_reg_gradient(y, tx, w[t+1]))
             losses.append(calculate_loss(y, tx, w_next))
 
         return full_grads, losses

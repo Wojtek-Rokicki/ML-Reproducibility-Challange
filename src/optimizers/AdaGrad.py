@@ -63,8 +63,7 @@ class AdaGrad(Optimizer):
             v_k = np.diag(self.lambda_ / np.sqrt(G_t) + self.epsilon) @ g_t
             w_next = w[t] - v_k
             w.append(w_next)
-            full_grads = [log_reg_gradient(y, tx, w[t+1])]
-
+            full_grads.append(log_reg_gradient(y, tx, w[t+1]))
             grads.append(g_t)
             losses.append(calculate_loss(y, tx, w_next))
 
