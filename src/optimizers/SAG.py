@@ -16,7 +16,6 @@ class SAG:
     losses = []
     past_grads = []
     full_grads = [log_reg_gradient(y, tx, w_0)]
-    avg_grad 
 
     for t in range(max_iter):
         i_t = np.random.choice(np.arange(len(y)))
