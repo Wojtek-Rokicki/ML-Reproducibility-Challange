@@ -5,10 +5,12 @@ from src.logistic_regression.log_reg import log_reg_gradient, calculate_loss
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 
 class SAG:
+  name = "AdaGrad"
+  n_params_to_tune = 1
   def __init__(self, lambda_=0.001):
     self.learning_rate = lambda_
   
-def optimize(self, w_0, tx, y, max_iter):
+  def optimize(self, w_0, tx, y, max_iter):
     w = [w_0]
     grads = []
     losses = []
