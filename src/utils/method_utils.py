@@ -15,3 +15,11 @@ def grad_sum(grads):
     for s in range(len(grads)):
         temp.append(np.linalg.norm(grads[s])**2)
     return np.sum(temp)
+
+def lip_const(tx, lambda_=None):
+    if lambda_ != None:
+        L_max = np.linalg.norm(tx, 'fro') ** 2 + lambda_
+    else:
+        L_max = np.linalg.norm(tx, 'fro')
+
+    return 1 / L_max
