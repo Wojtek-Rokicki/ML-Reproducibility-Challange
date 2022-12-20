@@ -2,6 +2,7 @@ import numpy as np
 
 from src.optimizers.Optimizer import Optimizer
 
+from src.logistic_regression.log_reg import log_reg_gradient
 from src.logistic_regression.stochastic_gradient import stochastic_gradient
 from src.logistic_regression.log_reg import calculate_loss
 
@@ -40,9 +41,9 @@ class SGD(Optimizer):
         n = len(y)
 
         for t in range(max_iter):
-            # i_t = np.random.choice(np.arange(n))  # get index of sample for which to compute gradient
-            sample_indices = np.random.choice(range(0, len(y)), size=10, replace=False)
-            gradient = stochastic_gradient(y, tx, w[t], sample_indices)
+            i_t = np.random.choice(np.arange(n))  # get index of sample for which to compute gradient
+            # sample_indices = np.random.choice(range(0, len(y)), size=10, replace=False)
+            gradient = stochastic_gradient(y, tx, w[t], [i_t])
             w_next = w[t] - self.lambda_ * gradient
 
             w.append(w_next)

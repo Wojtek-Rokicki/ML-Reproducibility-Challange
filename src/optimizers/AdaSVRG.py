@@ -36,10 +36,17 @@ class AdaSVRG(Optimizer):
         w = [w_0]
         grads = []
         losses = []
+        n = len(y)
 
-        # L = np.linalg.norm(tx, 'fro')**2 + lamb <- regularizer param
+        # L = np.linalg.norm(tx, 'fro')**2 + self.lambda_ #<- regularizer param
+        # step_size = 1 / L
+        
         # l_max (below) is max l for each row
-        step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
+        
+        step_size = 1/(np.linalg.norm(tx, 'fro') ** 2 + self.lambda_) 
+        # step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
+        
+        
 
         for k in range(max_iter):
             i_k = np.random.choice(np.arange(len(y)))
@@ -48,10 +55,11 @@ class AdaSVRG(Optimizer):
                 z = w[k]
                 v = log_reg_gradient(y, tx, w[k])
                 grads.append(v)
+                print('Full grad, iter:', k)
 
             g_k = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
             G_k += np.linalg.norm(g_k) ** 2
-            A_k = np.diag(step_size / np.sqrt(G_k) + self.epsilon)
+            A_k = np.diag(step_size / (np.sqrt(G_k) + self.epsilon))
 
             next_w = w[k] - A_k @ g_k
 

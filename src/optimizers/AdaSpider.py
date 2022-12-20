@@ -43,11 +43,13 @@ class AdaSpider(Optimizer):
                 i_t = np.random.choice(np.arange(len(y)))
                 t_grad = stochastic_gradient(y, tx, w[t], [i_t]) - stochastic_gradient(y, tx, w[t - 1], [i_t]) + grads[t - 1]
 
-            grads.append(t_grad)
             gamma = 1 / (n ** (1 / 4) * np.sqrt(np.sqrt(n) + grad_sum(grads)))
 
             w_next = w[t] - gamma * t_grad
+            
             w.append(w_next)
+            grads.append(t_grad)
+        
             losses.append(calculate_loss(y, tx, w_next))
 
         return oracle_grads, losses

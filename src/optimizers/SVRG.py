@@ -30,20 +30,23 @@ class SVRG(Optimizer):
         losses = []
         n = len(y)
 
-        L_max = np.linalg.norm(tx, 'fro') ** 2 + 5  # 100  #
-        step_size = 1 / L_max  #(np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
-
+        # L_max = np.linalg.norm(tx, 'fro') ** 2 + self.lambda # 100  #
+        # step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
+        step_size = 1/(np.linalg.norm(tx, 'fro') ** 2 + self.lambda_) 
+        
+        print("Step size", step_size)
         for k in range(max_iter):
             if k % self.q == 0:
                 z = w[k]
                 v = log_reg_gradient(y, tx, w[k])
                 grads.append(v)
+                print('Full grad, iter:', k, np.linalg.norm(v)**2)
 
             i_k = np.random.choice(np.arange(len(y)))
             grad = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
-
+            # print(float(np.linalg.norm(grad)**2))
             next_w = w[k] - step_size * grad
-
+            
             w.append(next_w)
             losses.append(calculate_loss(y, tx, next_w))
 
