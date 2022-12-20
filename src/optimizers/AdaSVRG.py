@@ -22,11 +22,9 @@ class AdaSVRG(Optimizer):
         """
         self.q = q
         self.lambda_ = lambda_
-        self.epsilon = epsilon
 
     def set_params(self, new_lambda, new_epsilon):
         self.lambda_ = new_lambda
-        self.epsilon = new_epsilon
 
     def optimize(self, w_0, tx, y, max_iter):
         D = len(w_0)
@@ -37,9 +35,7 @@ class AdaSVRG(Optimizer):
         grads = []
         losses = []
 
-        # L = np.linalg.norm(tx, 'fro')**2 + lamb <- regularizer param
-        # l_max (below) is max l for each row
-        step_size = 1 / (np.max([np.linalg.norm(tx[i]) ** 2 for i in range(len(tx))]) + self.lambda_)
+        step_size = lip_const(tx, self.lambda_)
 
         for k in range(max_iter):
             i_k = np.random.choice(np.arange(len(y)))
@@ -51,7 +47,7 @@ class AdaSVRG(Optimizer):
 
             g_k = stochastic_gradient(y, tx, w[k], [i_k]) - stochastic_gradient(y, tx, z, [i_k]) + v
             G_k += np.linalg.norm(g_k) ** 2
-            A_k = np.diag(step_size / np.sqrt(G_k) + self.epsilon)
+            A_k = np.diag(step_size / np.sqrt(G_k))
 
             next_w = w[k] - A_k @ g_k
 
