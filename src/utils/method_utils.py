@@ -8,10 +8,13 @@ def non_convex(w):
         temp[i] = w[i] / (1 + w[i]**2)**2
     return np.sum(temp)
 
-
 def grad_sum(grads):
     # compute the sum of gradients for t'th stepsize
     temp = list()
     for s in range(len(grads)):
         temp.append(np.linalg.norm(grads[s])**2)
     return np.sum(temp)
+
+def lip_const(tx, lambda_):
+    L_max = np.linalg.norm(tx, 'fro') ** 2 + lambda_
+    return 1 / L_max
