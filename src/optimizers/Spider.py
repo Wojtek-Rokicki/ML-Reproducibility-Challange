@@ -40,7 +40,7 @@ class Spider(Optimizer):
         :param tx: Built model
         :param y: Target data
         :param max_iter:
-        :return: List of oracle gradients
+        :return: List of oracle gradient
         """
         grads = []
         oracle_grads = []
@@ -53,6 +53,7 @@ class Spider(Optimizer):
             if t % self.q == 0:
                 v_k = log_reg_gradient(y, tx, w[t])
                 oracle_grads.append(v_k)
+                print(t)
             else:
                 # sample_indices = np.random.choice(range(0, len(y)), size=S2, replace=False)
                 i_t = np.random.choice(np.arange(n))                

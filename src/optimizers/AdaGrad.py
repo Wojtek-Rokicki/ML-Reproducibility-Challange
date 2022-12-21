@@ -78,6 +78,8 @@ class AdaGrad(Optimizer):
             w_next = w[t] - v_k
             w.append(w_next)
 
+            if t % 10000 == 0:
+                print(t)
             grads.append(grad)
             losses.append(calculate_loss(y, tx, w_next))
         
