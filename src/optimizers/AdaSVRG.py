@@ -23,7 +23,7 @@ class AdaSVRG(Optimizer):
         self.q = q
         self.lambda_ = lambda_
 
-    def set_params(self, new_lambda, new_epsilon):
+    def set_params(self, new_lambda):
         self.lambda_ = new_lambda
 
     def optimize(self, w_0, tx, y, max_iter):
